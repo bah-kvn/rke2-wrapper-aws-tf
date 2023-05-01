@@ -58,7 +58,7 @@ module "agents" {
   cluster_data          = module.rke2.cluster_data
   asg                   = each.value.asg
   block_device_mappings = each.value.root_volume
-
+  associate_public_ip_address = true
 
   rke2_config = yamlencode({
     node-label = ["nodepool=${each.value.name}"]

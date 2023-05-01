@@ -14,15 +14,15 @@ variable "subnets" {
 }
 
 variable "rke2_version" {
-  type = str
+  type        = str
   description = "RKE2 version to deploy"
-  default = "v1.26.3+rke2r1"
+  default     = "v1.26.3+rke2r1"
 }
 
 variable "enable_ccm" {
-  type = bool
+  type        = bool
   description = "Whether or not to enable the AWS Cloud Controller Manager"
-  default = true
+  default     = true
 }
 
 variable "control_plane" {

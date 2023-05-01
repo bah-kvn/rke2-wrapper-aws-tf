@@ -1,5 +1,5 @@
 output "cluster_auth" {
-  value = data.external.cluster_auth.result
+  value     = data.external.cluster_auth.result
   sensitive = true
 }
 

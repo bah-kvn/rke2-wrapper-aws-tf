@@ -34,7 +34,7 @@ module "rke2" {
   controlplane_internal       = false # Note this defaults to best practice of true, but is explicitly set to public for demo purposes
   servers                     = 3
   associate_public_ip_address = true
-  block_device_mappings = var.control_plane.root_volume
+  block_device_mappings       = var.control_plane.root_volume
 
   tags = local.tags
 }
@@ -44,20 +44,20 @@ module "rke2" {
 module "agents" {
   for_each = { for nodepool in var.nodepools : nodepool.name => nodepool }
 
-  source  = "git::https://github.com/rancherfederal/rke2-aws-tf.git//modules/agent-nodepool?ref=v2.3.2"
+  source = "git::https://github.com/rancherfederal/rke2-aws-tf.git//modules/agent-nodepool?ref=v2.3.2"
 
-  var.rke2_version
+  rke2_version = var.rke2_version
 
-  name    = each.value.name
-  vpc_id  = var.vpc_id
-  subnets = var.subnets
+  name       = each.value.name
+  vpc_id     = var.vpc_id
+  subnets    = var.subnets
   enable_ccm = var.enable_ccm
 
-  ami                 = each.value.ami
-  ssh_authorized_keys = [tls_private_key.ssh.public_key_openssh]
-  instance_type       = each.value.instance_type
-  cluster_data        = module.rke2.cluster_data
-  asg                 = each.value.asg
+  ami                   = each.value.ami
+  ssh_authorized_keys   = [tls_private_key.ssh.public_key_openssh]
+  instance_type         = each.value.instance_type
+  cluster_data          = module.rke2.cluster_data
+  asg                   = each.value.asg
   block_device_mappings = each.value.root_volume
 
 
@@ -83,7 +83,7 @@ resource "random_string" "kubeconfig_suffix" {
   length = 4
 }
 
-locals{
+locals {
   kubeconfig = abspath("rke2-${var.cluster_name}-${random_string.kubeconfig_suffix.result}.yaml")
 }
 
@@ -103,8 +103,8 @@ resource "null_resource" "kubeconfig" {
 
 # fetch cluster auth data for outputs
 data "external" "cluster_auth" {
-  depends_on = [ null_resource.kubeconfig ]
-  program = [ "bash", "-c", abspath("scripts/fetch-auth.sh") ]
+  depends_on = [null_resource.kubeconfig]
+  program    = ["bash", "-c", abspath("scripts/fetch-auth.sh")]
   query = {
     kubeconfig = local.kubeconfig
   }
@@ -133,12 +133,12 @@ resource "null_resource" "add_ons" {
 
   # we run this twice because sometimes the ordering is funky
   provisioner "local-exec" {
-    interpreter = [ "bash" ]
+    interpreter = ["bash"]
     environment = merge(var.add_ons.environment, {
-      ADD_ONS = var.add_ons.directory
+      ADD_ONS    = var.add_ons.directory
       KUBECONFIG = local.kubeconfig
-      TRIES = 3
-      SLEEP = 5
+      TRIES      = 3
+      SLEEP      = 5
     })
     command = abspath("scripts/install-add-ons.sh")
   }

@@ -14,7 +14,7 @@ variable "subnets" {
 }
 
 variable "rke2_version" {
-  type        = str
+  type        = string
   description = "RKE2 version to deploy"
   default     = "v1.26.3+rke2r1"
 }

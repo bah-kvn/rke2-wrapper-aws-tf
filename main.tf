@@ -17,7 +17,6 @@ resource "local_file" "ssh_pem" {
   file_permission = "0600"
 }
 
-
 module "rke2" {
   source = "git::https://github.com/rancherfederal/rke2-aws-tf.git?ref=v2.3.2"
 

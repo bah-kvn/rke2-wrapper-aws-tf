@@ -18,7 +18,7 @@ resource "local_file" "ssh_pem" {
 }
 
 module "rke2" {
-  source = "git::https://github.com/rancherfederal/rke2-aws-tf.git?ref=v2.3.2"
+  source = "git::https://github.com/boozallen/rke2-aws-tf.git?ref=develop"
 
   rke2_version = var.rke2_version
 
@@ -43,7 +43,7 @@ module "rke2" {
 module "agents" {
   for_each = { for nodepool in var.nodepools : nodepool.name => nodepool }
 
-  source = "git::https://github.com/rancherfederal/rke2-aws-tf.git//modules/agent-nodepool?ref=v2.3.2"
+  source = "git::https://github.com/boozallen/rke2-aws-tf.git//modules/agent-nodepool?ref=develop"
 
   rke2_version = var.rke2_version
 

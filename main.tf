@@ -80,6 +80,7 @@ resource "aws_security_group_rule" "quickstart_ssh" {
 # Example method of fetching kubeconfig from state store, requires aws cli and bash locally
 resource "random_string" "kubeconfig_suffix" {
   length = 4
+  special = false
 }
 
 locals {

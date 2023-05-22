@@ -21,7 +21,9 @@ module "rke2" {
   source = "git::https://github.com/boozallen/rke2-aws-tf.git?ref=develop"
 
   rke2_version = var.rke2_version
-
+  rke2_config  = var.rke2_config
+  pre_userdata = var.pre_userdata
+  ccm_external = var.ccm_external
   cluster_name = var.cluster_name
   vpc_id       = var.vpc_id
   subnets      = var.subnets
@@ -34,7 +36,7 @@ module "rke2" {
   servers                     = 3
   associate_public_ip_address = true
   block_device_mappings       = var.control_plane.root_volume
-
+  extra_block_device_mappings = var.control_plane.extra_block_device_mappings
   tags = local.tags
 }
 
@@ -45,8 +47,10 @@ module "agents" {
 
   source = "git::https://github.com/boozallen/rke2-aws-tf.git//modules/agent-nodepool?ref=develop"
 
+  ccm_external = var.ccm_external
   rke2_version = var.rke2_version
-
+  rke2_config  = var.rke2_config
+  pre_userdata = var.pre_userdata
   name       = each.value.name
   vpc_id     = var.vpc_id
   subnets    = var.subnets
@@ -58,11 +62,12 @@ module "agents" {
   cluster_data          = module.rke2.cluster_data
   asg                   = each.value.asg
   block_device_mappings = each.value.root_volume
+  extra_block_device_mappings = each.value.extra_block_device_mappings
   associate_public_ip_address = true
 
-  rke2_config = yamlencode({
-    node-label = ["nodepool=${each.value.name}"]
-  })
+#  rke2_config = yamlencode({
+#    node-label = ["nodepool=${each.value.name}"]
+#  })
 
   tags = merge(local.tags, { nodepool = each.value.name })
 }

@@ -33,6 +33,7 @@ variable "control_plane" {
     instance_type = string
     # The configuration for the root volume
     root_volume = map(string)
+    extra_block_device_mappings = list(map(string))
   })
 }
 
@@ -48,6 +49,7 @@ variable "nodepools" {
       termination_policies = list(string)
     })
     root_volume = map(string)
+    extra_block_device_mappings = list(map(string))
   }))
   default     = []
   description = "A list of agent nodepools to configure."
@@ -64,3 +66,22 @@ variable "add_ons" {
   })
   description = "The cluster add-ons configuration to apply"
 }
+
+variable "ccm_external" {
+  type        = bool
+  description = "True indicates the external cloud provider is to be used"
+  default     = true
+}
+
+variable "pre_userdata" {
+  description = "Custom userdata to run immediately before rke2 node attempts to join cluster, after required rke2, dependencies are installed"
+  type        = string
+  default     = ""
+}
+
+variable "rke2_config" {
+  description = "Additional configuration for config.yaml"
+  type        = string
+  default     = ""
+}
+

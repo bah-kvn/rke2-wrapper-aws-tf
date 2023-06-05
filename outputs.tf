@@ -15,3 +15,7 @@ output "rke2" {
   value = module.rke2
 }
 
+output "agents" {
+  value = module.agents
+}
+
